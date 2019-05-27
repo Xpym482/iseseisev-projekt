@@ -11,6 +11,7 @@ let rune_invisible = new Image();
 let empty_bird = new Image();
 let rune_haste = new Image();
 let rune_score = new Image();
+let rules = new Image();
 let fly = new Audio();
 let score_audio = new Audio();
 
@@ -34,6 +35,7 @@ let test = 0;
 let score_now_invisible = 0;
 let score_now_haste = 0;
 
+rules.src = "img/rules.png";
 rune_haste.src = "img/rune_haste.png";
 rune_invisible.src = "img/rune_invisible.png";
 rune_score.src = "img/rune_score.png";
@@ -160,9 +162,13 @@ function starGame() {
   ctx.drawImage(bg, 0, 0);
   ctx.drawImage(fg, 0, cvs.height - fg.height);
   ctx.drawImage(bird, xPos, yPos);
+  /*ctx.fillStyle = "#000";
+  ctx.font = "24px Verdana";
+  ctx.fillText("Press x to win", cvs.width / 5, cvs.height / 2);*/
+  ctx.drawImage(rules, 50, 100);
   ctx.fillStyle = "#000";
   ctx.font = "24px Verdana";
-  ctx.fillText("Press x to win", cvs.width / 5, cvs.height / 2);
+  ctx.fillText("Score: " + score, 0, 0);
 }
 
 function pseudorandom() {
