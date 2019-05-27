@@ -123,22 +123,22 @@ function draw() {
           break;
         case rune_invisible:
           runeInvisibleActivated = 1;
-          score_now_invisible = score;
+          score_now_invisible = i;
           randomizer = 0;
           break;
         case rune_haste:
           runeHasteActivated = 1;
           rune_speed = 2;
           rune_grav = 1.2;
-          score_now_haste = score;
+          score_now_haste = i;
           randomizer = 0;
           break;
       }
     }
-    if(runeInvisibleActivated && pipe[i].x == -50 && score == score_now_invisible + 2){
+    if(runeInvisibleActivated && pipe[i].x == -50 && score_now_invisible + 2 < i){
       runeInvisibleActivated = 0;
     }
-    if (runeHasteActivated && pipe[i].x == -50 && score == score_now_haste + 2) {
+    if (runeHasteActivated && pipe[i].x == -50 && score_now_haste + 2 < i) {
       runeHasteActivated = 0;
       rune_speed = 1;
       rune_grav = 0;
