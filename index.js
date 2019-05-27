@@ -1,3 +1,4 @@
+//jshint esversion:6
 let cvs = document.getElementById("canvas");
 let ctx = cvs.getContext("2d");
 
@@ -30,6 +31,8 @@ let rune_grav = 0;
 let randomizer;
 let pipeNumber = 0;
 let test = 0;
+let score_now_invisible = 0;
+let score_now_haste = 0;
 
 rune_haste.src = "img/rune_haste.png";
 rune_invisible.src = "img/rune_invisible.png";
@@ -88,7 +91,7 @@ function draw() {
       randomizer = pseudorandom();
     }
 
-    if(randomizer){
+    if(randomizer && pipeNumber >= 1){
       ctx.drawImage(randomizer, pipe[pipeNumber].x + 10, pipe[pipeNumber].y + pipeUp.height + 40);
       test = 1;
     }
@@ -98,8 +101,8 @@ function draw() {
 
     ctx.drawImage(pipeUp, pipe[i].x, pipe[i].y);
     ctx.drawImage(pipeBottom, pipe[i].x, pipe[i].y + pipeUp.height + gap);
-    pipe[i].x = pipe[i].x - rune_speed;
-    runes[pipeNumber].x--;
+    pipe[i].x = pipe[i].x - 1;
+    runes[i].x--;
 
     if(!runeInvisibleActivated && xPos + bird.width >= pipe[i].x && xPos <= pipe[i].x + pipeUp.width
       && (yPos <= pipe[i].y + pipeUp.height || yPos + bird.height >= pipe[i].y +
@@ -111,8 +114,7 @@ function draw() {
       score++;
       score_audio.play();
     }
-
-    if(test && xPos + bird.width >= runes[pipeNumber].x + 10) //третье условие - появилась ли какая-то руна
+    if(test && xPos + bird.width >= runes[i].x + 10 && runes[i].x == -10) //третье условие - появилась ли какая-то руна
     {
       switch (randomizer) {
         case rune_score:
@@ -121,26 +123,28 @@ function draw() {
           break;
         case rune_invisible:
           runeInvisibleActivated = 1;
-          score_now = score;
+          score_now_invisible = score;
           randomizer = 0;
           break;
         case rune_haste:
           runeHasteActivated = 1;
           rune_speed = 2;
           rune_grav = 1.2;
-          score_now = score;
+          score_now_haste = score;
           randomizer = 0;
           break;
       }
     }
-
-    if((runeHasteActivated || runeInvisibleActivated) && pipe[i].x == -50 && score == score_now + 2){
-      runeHasteActivated = 0;
+    if(runeInvisibleActivated && pipe[i].x == -50 && score == score_now_invisible + 2){
       runeInvisibleActivated = 0;
+    }
+    if (runeHasteActivated && pipe[i].x == -50 && score == score_now_haste + 2) {
+      runeHasteActivated = 0;
       rune_speed = 1;
       rune_grav = 0;
       test = 0;
     }
+
   }
   ctx.drawImage(fg, 0, cvs.height - fg.height);
   yPos += grav + (rune_grav > 0 ? rune_grav : 0);
@@ -182,5 +186,6 @@ function pseudorandom() {
   else {
     rune_random = 0;
   }
+  console.log(random);
   return rune_random;
 }
