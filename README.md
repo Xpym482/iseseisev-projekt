@@ -1,6 +1,6 @@
-# awesome markdown document
+# Flappy Bird
 
-iseseisev-projekt
+## iseseisev-projekt
 
 Eesrakenduste arendamise iseseisva projekti lähteülesanne.
 
