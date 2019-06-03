@@ -12,7 +12,6 @@ let empty_bird = new Image();
 let rune_haste = new Image();
 let rune_score = new Image();
 let rules = new Image();
-let fly = new Audio();
 let score_audio = new Audio();
 
 let gap = 100;
@@ -31,7 +30,7 @@ let rune_speed = 1;
 let rune_grav = 0;
 let randomizer;
 let pipeNumber = 0;
-let test = 0;
+let runeIsDrawn = 0;
 let score_now_invisible = 0;
 let score_now_haste = 0;
 
@@ -45,7 +44,6 @@ bg.src = "img/bg.png";
 fg.src = "img/fg.png";
 pipeUp.src = "img/pipeUp.png";
 pipeBottom.src = "img/pipeBottom.png";
-fly.src = "audio/fly.mp3";
 score_audio.src = "audio/score.mp3";
 
 document.addEventListener("keydown", moveUp);
@@ -61,7 +59,6 @@ function moveUp() {
       gameMod = "running";
       break;
   }
-  //fly.play();
 }
 
 runes[0] = {
@@ -76,9 +73,7 @@ pipe[0] = {
 
 function draw() {
   ctx.drawImage(bg, 0, 0);
-  //ctx.drawImage(rune_invisble, pipe[0].x + 10, pipe[0].y + pipeUp.height + 40);
-  //ctx.drawImage(rune_haste, pipe[0].x + 10, pipe[0].y + pipeUp.height + 40);
-  ctx.drawImage(runeInvisibleActivated ? empty_bird : bird, xPos, yPos);
+  ctx.drawImage(runeInvisibleActivated ? empty_bird : bird, xPos, yPos); //если невидимка активирована то картинка птицы прозрачная
   for(let i = 0; i < pipe.length; i++){
     if(pipe[i].x == 100){
       pipe.push({
@@ -90,15 +85,15 @@ function draw() {
         y : 0
       });
       pipeNumber = i;
-      randomizer = pseudorandom();
+      randomizer = pseudorandom(); //рандомим руну
     }
 
     if(randomizer && pipeNumber >= 1){
-      ctx.drawImage(randomizer, pipe[pipeNumber].x + 10, pipe[pipeNumber].y + pipeUp.height + 40);
-      test = 1;
+      ctx.drawImage(randomizer, pipe[pipeNumber].x + 10, pipe[pipeNumber].y + pipeUp.height + 40); //рисуем выпавшую руну
+      runeIsDrawn = 1;
     }
     else{
-      test = 0;
+      runeIsDrawn = 0;
     }
 
     ctx.drawImage(pipeUp, pipe[i].x, pipe[i].y);
@@ -106,7 +101,7 @@ function draw() {
     pipe[i].x = pipe[i].x - 1;
     runes[i].x--;
 
-    if(!runeInvisibleActivated && xPos + bird.width >= pipe[i].x && xPos <= pipe[i].x + pipeUp.width
+    if(!runeInvisibleActivated && xPos + bird.width >= pipe[i].x && xPos <= pipe[i].x + pipeUp.width //коллизии столкновений в разных поизциях, который не срабатывает с невидимкой
       && (yPos <= pipe[i].y + pipeUp.height || yPos + bird.height >= pipe[i].y +
       pipeUp.height + gap) || yPos + bird.height >= cvs.height - fg.height){
         window.location.href = "index.html";
@@ -116,7 +111,8 @@ function draw() {
       score++;
       score_audio.play();
     }
-    if(test && xPos + bird.width >= runes[i].x + 10 && runes[i].x == -10) //третье условие - появилась ли какая-то руна
+
+    if(runeIsDrawn && xPos + bird.width >= runes[i].x + 10 && runes[i].x == -10) //появилась ли руна и где находится птичка и руна начинается между трубами
     {
       switch (randomizer) {
         case rune_score:
@@ -130,26 +126,26 @@ function draw() {
           break;
         case rune_haste:
           runeHasteActivated = 1;
-          rune_speed = 2;
           rune_grav = 1.2;
           score_now_haste = i;
           randomizer = 0;
           break;
       }
     }
+
     if(runeInvisibleActivated && pipe[i].x == -50 && score_now_invisible + 2 < i){
       runeInvisibleActivated = 0;
     }
-    if (runeHasteActivated && pipe[i].x == -50 && score_now_haste + 2 < i) {
+
+    if (runeHasteActivated && pipe[i].x == -50 && score_now_haste + 2 < i) { //проверяем, находится ли птичка в нужной позиции и отсчитываем 3 трубы
       runeHasteActivated = 0;
-      rune_speed = 1;
       rune_grav = 0;
-      test = 0;
+      runeIsDrawn = 0;
     }
 
   }
   ctx.drawImage(fg, 0, cvs.height - fg.height);
-  yPos += grav + (rune_grav > 0 ? rune_grav : 0);
+  yPos += grav + (rune_grav > 0 ? rune_grav : 0); //меняем гравитацию падению при активированной руне
   ctx.fillStyle = "#000";
   ctx.font = "24px Verdana";
   ctx.fillText("Score: " + score, 10, cvs.height - 20);
@@ -162,36 +158,28 @@ function starGame() {
   ctx.drawImage(bg, 0, 0);
   ctx.drawImage(fg, 0, cvs.height - fg.height);
   ctx.drawImage(bird, xPos, yPos);
-  /*ctx.fillStyle = "#000";
-  ctx.font = "24px Verdana";
-  ctx.fillText("Press x to win", cvs.width / 5, cvs.height / 2);*/
   ctx.drawImage(rules, 50, 100);
   ctx.fillStyle = "#000";
   ctx.font = "24px Verdana";
   ctx.fillText("Score: " + score, 0, 0);
 }
 
-function pseudorandom() {
-  //let runes = [0, 1, 2]; //0 - прибавление счёта, 1 - невидимка, 2 - ускорение
-  let runeNumber;
+function pseudorandom() { //рандомим числа, когда появляется 3 или 6, то прибавляется счёт; когда 8 или 4, то руна невидимки; когда рандоимим 5, то руна гравитации;
+  //в остальных случаях ничего не происходит
   let random = Math.ceil(Math.random() * 11);
   let rune_random;
   if(random == (3 || 6))
   {
-    runeNumber = 0;
     rune_random = rune_score;
   }
   else if (random % 4 == 0) {
-    runeNumber = 1;
     rune_random = rune_invisible;
   }
   else if (random == 5) {
-    runeNumber = 2;
     rune_random = rune_haste;
   }
   else {
     rune_random = 0;
   }
-  console.log(random);
   return rune_random;
 }
