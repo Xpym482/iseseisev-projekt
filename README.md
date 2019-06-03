@@ -35,3 +35,4 @@ Rakenduse puhul peavad olema täidetud vähemalt järgmised nõuded:
   5) saab kasutada "add to Home screen" funktsionaalsust.
 
 Rakenduses võib kasutada teiste autorite koodi, kuid enda panus peab olema natuke enamat kui võrguta olekus töötamine.
+https://xpym.ddns.net/iseseisev-projekt/
