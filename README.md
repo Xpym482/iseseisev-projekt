@@ -26,14 +26,14 @@ README.md fail sisaldab:
   3) Värvitud rune lihtsalt suurendab tulemusi kolme punkti võrra.
 
   Ekraanitõmmist rakendusest:
-  ![](./img/Screenshot.png)
+  ![Description](https://github.com/Xpym482/iseseisev-projekt/blob/master/img/Screenshot.PNG)
 
 Rakenduse puhul peavad olema täidetud vähemalt järgmised nõuded:
 
-  rakendus lahendab tõsist probleemi või on meelelahutusliku eesmärgiga;
-  rakenduse idee peab olema kooskõlastatud õppejõuga;
-  töötab võrguta olekus;
-  responsive disain;
-  saab kasutada "add to Home screen" funktsionaalsust.
+  1) rakendus lahendab tõsist probleemi või on meelelahutusliku eesmärgiga;
+  2) rakenduse idee peab olema kooskõlastatud õppejõuga;
+  3) töötab võrguta olekus;
+  4) responsive disain;
+  5) saab kasutada "add to Home screen" funktsionaalsust.
 
 Rakenduses võib kasutada teiste autorite koodi, kuid enda panus peab olema natuke enamat kui võrguta olekus töötamine.
